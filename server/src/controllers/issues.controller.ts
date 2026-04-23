@@ -5,6 +5,8 @@ import { persistUpload } from "../services/uploads.js";
 import { emitToUser } from "../services/socket.js";
 import { prisma } from "../config/prisma.js";
 
+import { awardPoints } from "../services/gamification.js";
+
 const createSchema = z.object({
   title: z.string().min(4).max(120),
   description: z.string().min(5).max(5000),
@@ -53,6 +55,9 @@ export async function createIssue(req: Request, res: Response) {
       createdById: req.auth.userId
     }
   });
+
+  // Award gamification points
+  await awardPoints(req.auth.userId, "complaint_submitted");
 
   const notif = await prisma.notification.create({
     data: {
@@ -180,7 +185,7 @@ export async function getIssue(req: Request, res: Response) {
 export async function upvoteIssue(req: Request, res: Response) {
   if (!req.auth) throw new HttpError(401, "Unauthorized");
   const id = z.string().min(1).parse(req.params.id);
-  const issue = await prisma.issue.findUnique({ where: { id }, select: { id: true, upvoteCount: true } });
+  const issue = await prisma.issue.findUnique({ where: { id }, select: { id: true, upvoteCount: true, createdById: true } });
   if (!issue) throw new HttpError(404, "Issue not found");
 
   try {
@@ -194,6 +199,9 @@ export async function upvoteIssue(req: Request, res: Response) {
     data: { upvoteCount: { increment: 1 } },
     select: { upvoteCount: true }
   });
+
+  // Award points to the creator of the issue 
+  await awardPoints(issue.createdById, "upvote_received");
 
   return res.json({ ok: true, upvoteCount: updated.upvoteCount });
 }
@@ -224,6 +232,13 @@ export async function adminUpdateIssue(req: Request, res: Response) {
       resolvedAt: body.status === "resolved" ? new Date() : undefined
     }
   });
+
+  // Award points for status milestones
+  if (body.status === "resolved" && issue.status !== "resolved") {
+    await awardPoints(issue.createdById, "issue_resolved");
+  } else if (body.status === "reviewed" && issue.status === "pending") {
+    await awardPoints(issue.createdById, "complaint_verified");
+  }
 
   const notif = await prisma.notification.create({
     data: {

@@ -80,10 +80,72 @@ model User {
   issues          Issue[]         @relation("UserIssues")
   notifications   Notification[]
   upvotes         IssueUpvote[]
+  
+  stats           UserStats?
+  badges          UserBadge[]
+  leaderboard     Leaderboard[]
+  pointsHistory   PointsHistory[]
 
   @@index([role])
   @@index([isBlocked])
   @@index([createdAt])
+}
+
+model UserStats {
+  userId          String   @id
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalPoints     Int      @default(0)
+  monthlyPoints   Int      @default(0)
+  complaintsCount Int      @default(0)
+  upvotesReceived  Int      @default(0)
+  commentsCount   Int      @default(0)
+  monthlyRank     Int?
+  topCitizenStatus Boolean @default(false)
+  updatedAt       DateTime @updatedAt
+}
+
+model Badge {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  minPoints Int
+  maxPoints Int
+  icon      String
+  color     String
+  users     UserBadge[]
+}
+
+model UserBadge {
+  id         String   @id @default(cuid())
+  userId     String
+  badgeId    String
+  assignedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+model Leaderboard {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  points    Int
+  rank      Int
+  period    String   // weekly, monthly, all_time
+  updatedAt DateTime @updatedAt
+
+  @@index([period, rank])
+}
+
+model PointsHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String   // complaint_submitted, upvote_received, etc.
+  points    Int
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 model Issue {

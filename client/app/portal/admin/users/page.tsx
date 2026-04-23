@@ -32,7 +32,7 @@ export default function AdminUsersPage() {
     <div className="space-y-4">
       <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
         <div>
-          <div className="flex items-center gap-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+          <div className="flex items-center gap-2 text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
             <Users className="size-7 text-indigo-500" /> Manage Users
           </div>
           <div className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">Search users and block spam accounts.</div>
@@ -53,20 +53,20 @@ export default function AdminUsersPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-200 bg-white/70 dark:border-slate-800 dark:bg-slate-950/35">
               <tr>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><UserIcon className="size-3.5 text-blue-500" /> Name</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><UserIcon className="size-4 text-blue-500" /> Name</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Mail className="size-3.5 text-indigo-500" /> Email</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Mail className="size-4 text-indigo-500" /> Email</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><ShieldCheck className="size-3.5 text-purple-500" /> Role</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><ShieldCheck className="size-4 text-purple-500" /> Role</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Calendar className="size-3.5 text-teal-500" /> Created</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Calendar className="size-4 text-teal-500" /> Created</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><MoreHorizontal className="size-3.5 text-orange-500" /> Action</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><MoreHorizontal className="size-4 text-orange-500" /> Action</div>
                 </th>
               </tr>
             </thead>

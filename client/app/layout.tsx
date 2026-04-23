@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Syne } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 
 export const metadata: Metadata = {
   title: "Smart Civic | Issue Reporting",
@@ -28,7 +29,7 @@ function ThemeScript() {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`min-h-screen antialiased ${inter.variable} font-sans`}>
+      <body className={`min-h-screen antialiased ${inter.variable} ${syne.variable} font-sans`}>
         <ThemeScript />
         {children}
       </body>

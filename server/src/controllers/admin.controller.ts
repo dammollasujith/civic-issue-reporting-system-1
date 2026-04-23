@@ -55,23 +55,45 @@ export async function adminSummary(_req: Request, res: Response) {
 }
 
 export async function adminTrends(_req: Request, res: Response) {
-  const byMonthRaw = await prisma.issue.findMany({
-    select: { createdAt: true }
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const rawData = await prisma.issue.findMany({
+    where: {
+      OR: [
+        { createdAt: { gte: thirtyDaysAgo } },
+        { resolvedAt: { gte: thirtyDaysAgo } }
+      ]
+    },
+    select: { createdAt: true, resolvedAt: true }
   });
-  const byMonthMap = new Map<string, number>();
-  for (const r of byMonthRaw) {
-    const y = r.createdAt.getFullYear();
-    const m = r.createdAt.getMonth() + 1;
-    const key = `${y}-${String(m).padStart(2, "0")}`;
-    byMonthMap.set(key, (byMonthMap.get(key) || 0) + 1);
+
+  const dailyMap = new Map<string, { reported: number; resolved: number }>();
+  
+  // Initialize map with last 30 days
+  for (let i = 0; i < 30; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split("T")[0];
+    dailyMap.set(key, { reported: 0, resolved: 0 });
   }
-  const byMonth = Array.from(byMonthMap.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .slice(-24)
-    .map(([k, count]) => {
-      const [y, m] = k.split("-").map(Number);
-      return { _id: { y, m }, count };
-    });
+
+  for (const r of rawData) {
+    const createdKey = r.createdAt.toISOString().split("T")[0];
+    if (dailyMap.has(createdKey)) {
+      dailyMap.get(createdKey)!.reported++;
+    }
+    if (r.resolvedAt) {
+      const resolvedKey = r.resolvedAt.toISOString().split("T")[0];
+      if (dailyMap.has(resolvedKey)) {
+        dailyMap.get(resolvedKey)!.resolved++;
+      }
+    }
+  }
+
+  const dailyStats = Array.from(dailyMap.entries())
+    .map(([date, stats]) => ({ date, ...stats }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   const byCategory = await prisma.issue.groupBy({
     by: ["category"],
@@ -85,8 +107,27 @@ export async function adminTrends(_req: Request, res: Response) {
     orderBy: { _count: { status: "desc" } }
   });
 
+  const byMonthRaw = await prisma.issue.findMany({
+    select: { createdAt: true }
+  });
+  const byMonthMap = new Map<string, number>();
+  for (const r of byMonthRaw) {
+    const y = r.createdAt.getFullYear();
+    const m = r.createdAt.getMonth() + 1;
+    const key = `${y}-${String(m).padStart(2, "0")}`;
+    byMonthMap.set(key, (byMonthMap.get(key) || 0) + 1);
+  }
+  const byMonth = Array.from(byMonthMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .slice(-12)
+    .map(([k, count]) => {
+      const [y, m] = k.split("-").map(Number);
+      return { _id: { y, m }, count };
+    });
+
   return res.json({
     ok: true,
+    dailyStats,
     byMonth,
     byCategory: byCategory.map((x) => ({ _id: x.category, count: x._count.category })),
     byStatus: byStatus.map((x) => ({ _id: x.status, count: x._count.status }))

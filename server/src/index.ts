@@ -88,6 +88,6 @@ await prisma.$connect();
 
 server.listen(env.PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server listening on :${env.PORT}`);
+  console.log(`Server listening on http://localhost:${env.PORT}`);
 });
 

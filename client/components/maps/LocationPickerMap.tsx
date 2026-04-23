@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -33,7 +33,7 @@ function MapController({ position }: { position: [number, number] | null }) {
   return null;
 }
 
-export default function LocationPickerMap({ initialCenter, zoom = 13, onLocationSelect, position: externalPosition }: LocationPickerMapProps) {
+const LocationPickerMap = memo(({ initialCenter, zoom = 13, onLocationSelect, position: externalPosition }: LocationPickerMapProps) => {
   useEffect(() => {
     ensureLeafletIcons();
   }, []);
@@ -67,5 +67,7 @@ export default function LocationPickerMap({ initialCenter, zoom = 13, onLocation
       </MapContainer>
     </div>
   );
-}
+});
+
+export default LocationPickerMap;
 

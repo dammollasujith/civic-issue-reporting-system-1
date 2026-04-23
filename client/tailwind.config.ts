@@ -5,6 +5,10 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        syne: ["var(--font-syne)", "sans-serif"]
+      },
       colors: {
         brand: {
           blue: "#2563EB",

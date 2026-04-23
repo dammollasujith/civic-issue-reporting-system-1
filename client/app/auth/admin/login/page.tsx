@@ -62,12 +62,12 @@ export default function AdminLoginPage() {
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <div className="mb-2 text-xs font-medium text-slate-700 dark:text-slate-200">Email</div>
+          <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Email</div>
           <Input placeholder="Enter your email" type="email" {...register("email")} />
           {errors.email && <div className="mt-1 text-xs text-red-600">{errors.email.message}</div>}
         </div>
         <div>
-          <div className="mb-2 text-xs font-medium text-slate-700 dark:text-slate-200">Password</div>
+          <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Password</div>
           <Input placeholder="••••••••" type="password" {...register("password")} />
           {errors.password && <div className="mt-1 text-xs text-red-600">{errors.password.message}</div>}
         </div>

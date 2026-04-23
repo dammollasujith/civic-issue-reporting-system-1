@@ -17,10 +17,13 @@ export default function AdminDashboardPage() {
 
   const monthData = useMemo(() => {
     const raw = trends?.byMonth || [];
-    return raw.map((x: any) => ({
-      month: `${x._id.y}-${String(x._id.m).padStart(2, "0")}`,
-      count: x.count
-    }));
+    return raw.map((x: any) => {
+      const d = new Date(x._id.y, x._id.m - 1);
+      return {
+        month: d.toLocaleString('default', { month: 'short', year: '2-digit' }),
+        "No. of Issues": x.count
+      };
+    });
   }, [trends]);
 
   const statusData = useMemo(() => {
@@ -35,10 +38,10 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex items-center gap-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">
+        <div className="flex items-center gap-2 text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">
           <LayoutDashboard className="size-7 text-blue-600" /> Admin Dashboard
         </div>
-        <div className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">City-wide overview, trends, and performance.</div>
+        <div className="mt-1 text-sm font-bold text-slate-600 dark:text-slate-300">City-wide overview, trends, and performance.</div>
       </div>
 
       <div className="grid gap-3 md:grid-cols-4">
@@ -58,11 +61,11 @@ export default function AdminDashboardPage() {
           }
         ].map(({ label, value, color, icon: Icon }) => {
           const colorStyles: Record<string, string> = {
-            blue: "border-t-[#3b82f6] text-[#3b82f6] bg-[#eff6ff]",
-            red: "border-t-[#ef4444] text-[#ef4444] bg-[#fef2f2]",
-            orange: "border-t-[#f97316] text-[#f97316] bg-[#fff7ed]",
-            green: "border-t-[#22c55e] text-[#22c55e] bg-[#f0fdf4]",
-            slate: "border-t-[#64748b] text-[#64748b] bg-[#f8fafc]",
+            blue: "border-t-[#3b82f6] text-[#3b82f6] bg-blue-50/60",
+            red: "border-t-[#ef4444] text-[#ef4444] bg-red-50/60",
+            orange: "border-t-[#f97316] text-[#f97316] bg-orange-50/60",
+            green: "border-t-[#22c55e] text-[#22c55e] bg-green-50/60",
+            slate: "border-t-[#64748b] text-[#64748b] bg-slate-50/60",
           };
           const style = colorStyles[color] || colorStyles.blue;
           const [borderColor, textColor, bgColor] = style.split(" ");
@@ -73,8 +76,8 @@ export default function AdminDashboardPage() {
                 <Icon className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value ?? "—"}</div>
-                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</div>
+                <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{value ?? "—"}</div>
+                <div className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">{label}</div>
               </div>
             </div>
           );
@@ -84,15 +87,15 @@ export default function AdminDashboardPage() {
       <div className="grid gap-3 lg:grid-cols-3">
         <Card className="p-6">
           <div className="flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400">
-            <BarChart3 className="size-4" /> Monthly complaints
+            <BarChart3 className="size-4" /> Monthly Complaints
           </div>
           <div className="mt-4 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthData}>
-                <XAxis dataKey="month" tick={{ fontSize: 12 }} interval="preserveStartEnd" />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#2563EB" radius={[10, 10, 0, 0]} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} label={{ value: 'No. of Issues', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#64748b', fontSize: 10, fontWeight: 700 } }} />
+                <Tooltip cursor={{ fill: 'rgba(0,0,0,0.02)' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                <Bar dataKey="No. of Issues" fill="#3B82F6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -120,7 +123,7 @@ export default function AdminDashboardPage() {
               </ResponsiveContainer>
             )}
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-700 dark:text-slate-200">
+          <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-bold text-slate-700 dark:text-slate-200">
             {statusData.map((s) => (
               <div
                 key={s.name}
@@ -130,22 +133,24 @@ export default function AdminDashboardPage() {
                   <span className="size-2 rounded-full" style={{ background: s.color }} />
                   {s.name}
                 </div>
-                <div className="font-semibold">{s.value}</div>
+                <div className="font-black">{s.value}</div>
               </div>
             ))}
           </div>
         </Card>
 
-        <Card className="p-6 border-t-4 border-t-amber-400">
-          <div className="flex items-center gap-2 text-sm font-bold text-amber-600 dark:text-amber-500">
-            <Lightbulb className="size-4" /> Quick notes
+        <Card className="p-6 border-2 border-amber-100 dark:border-amber-900/30 bg-amber-50/30 dark:bg-slate-900">
+          <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-700 dark:text-amber-500">
+            <Lightbulb className="size-4" /> Quick Insights
           </div>
-          <div className="mt-4 space-y-3 text-sm font-medium text-amber-900 dark:text-amber-100">
-            <div className="rounded-2xl bg-amber-50/80 p-4 shadow-sm dark:bg-amber-900/20">
-              <span className="font-bold text-amber-600">Tip:</span> Use “Manage Reports” to assign departments, add notes, and update statuses.
+          <div className="mt-6 space-y-4 text-sm font-bold text-amber-900 dark:text-amber-100">
+            <div className="rounded-3xl bg-white p-5 shadow-sm border border-amber-100 dark:bg-amber-950/20 dark:border-amber-900/50">
+              <span className="text-amber-600 uppercase text-[10px] font-black block mb-1">PRO TIP</span> 
+              Use “Manage Reports” to assign specialized departments, add official notes, and track resolution timelines.
             </div>
-            <div className="rounded-2xl bg-amber-50/80 p-4 shadow-sm dark:bg-amber-900/20">
-              <span className="font-bold text-amber-600">Note:</span> High priority issues are severity “critical” and not yet resolved.
+            <div className="rounded-3xl bg-white p-5 shadow-sm border border-amber-100 dark:bg-amber-950/20 dark:border-amber-900/50">
+              <span className="text-amber-600 uppercase text-[10px] font-black block mb-1">SYSTEM NOTE</span> 
+              Identified <span className="underline decoration-amber-400">High Priority</span> issues are those flagged as 'critical' severity that await resolution.
             </div>
           </div>
         </Card>

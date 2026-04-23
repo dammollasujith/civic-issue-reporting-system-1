@@ -45,10 +45,10 @@ export default function CitizenDashboardPage() {
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex items-center gap-2 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+        <div className="flex items-center gap-2 text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
           <Home className="size-7 text-blue-600" /> Dashboard
         </div>
-        <div className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">Your reports, status overview, and category distribution.</div>
+        <div className="mt-1 text-sm font-bold text-slate-600 dark:text-slate-300">Your reports, status overview, and category distribution.</div>
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">
@@ -57,16 +57,15 @@ export default function CitizenDashboardPage() {
           { label: "Pending", value: stats.pending, color: "red", icon: Clock },
           { label: "In Progress", value: stats.inProgress, color: "orange", icon: Loader },
           { label: "Resolved", value: stats.resolved, color: "green", icon: CheckCircle2 },
-          { label: "Rejected", value: stats.rejected, color: "slate", icon: XCircle },
-          { label: "Upvotes Received", value: stats.upvotes, color: "purple", icon: ArrowUpCircle }
+          { label: "Rejected", value: stats.rejected, color: "slate", icon: XCircle }
         ].map(({ label, value, color, icon: Icon }) => {
           const colorStyles: Record<string, string> = {
-            blue: "border-t-[#3b82f6] text-[#3b82f6] bg-[#eff6ff]",
-            red: "border-t-[#ef4444] text-[#ef4444] bg-[#fef2f2]",
-            orange: "border-t-[#f97316] text-[#f97316] bg-[#fff7ed]",
-            green: "border-t-[#22c55e] text-[#22c55e] bg-[#f0fdf4]",
-            slate: "border-t-[#64748b] text-[#64748b] bg-[#f8fafc]",
-            purple: "border-t-[#a855f7] text-[#a855f7] bg-[#faf5ff]",
+            blue: "border-t-[#3b82f6] text-[#3b82f6] bg-blue-50/60",
+            red: "border-t-[#ef4444] text-[#ef4444] bg-red-50/60",
+            orange: "border-t-[#f97316] text-[#f97316] bg-orange-50/60",
+            green: "border-t-[#22c55e] text-[#22c55e] bg-green-50/60",
+            slate: "border-t-[#64748b] text-[#64748b] bg-slate-50/60",
+            purple: "border-t-[#a855f7] text-[#a855f7] bg-purple-50/60",
           };
           const style = colorStyles[color] || colorStyles.blue;
           const [borderColor, textColor, bgColor] = style.split(" ");
@@ -77,8 +76,8 @@ export default function CitizenDashboardPage() {
                 <Icon className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value ?? "—"}</div>
-                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</div>
+                <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{value ?? "—"}</div>
+                <div className="text-xs font-black uppercase tracking-wider text-slate-600 dark:text-slate-300">{label}</div>
               </div>
             </div>
           );
@@ -138,14 +137,14 @@ export default function CitizenDashboardPage() {
                 className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-700/80 dark:bg-slate-950/40"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                  <div className="text-sm font-bold text-slate-950 dark:text-white">
                     {it.category.replaceAll("_", " ")}
                   </div>
                   <span className="rounded-full bg-slate-50 px-3 py-1 text-xs text-slate-700 dark:bg-slate-900/60 dark:text-slate-200">
                     {it.status.replaceAll("_", " ")}
                   </span>
                 </div>
-                <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <div className="mt-1 text-xs font-bold text-slate-600 dark:text-slate-400">
                   {new Date(it.createdAt).toLocaleString()}
                 </div>
               </div>

@@ -42,7 +42,7 @@ export function Sidebar({
   }
 
   return (
-    <aside className="glass hidden h-[calc(100vh-2rem)] w-72 shrink-0 flex-col rounded-3xl p-4 shadow-soft md:flex">
+    <aside className="glass hidden h-[calc(100vh-2rem)] w-72 shrink-0 flex-col rounded-[32px] border-2 border-slate-200/50 p-4 shadow-2xl backdrop-blur-2xl dark:border-slate-800/50 md:flex">
       <Link
         href={homeHref}
         className="flex items-center gap-2 rounded-2xl px-3 py-3 transition hover:bg-white/40 dark:hover:bg-slate-900/40"
@@ -51,7 +51,7 @@ export function Sidebar({
           🌍
         </span>
         <div className="leading-tight">
-          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</div>
+          <div className="text-[15px] font-black tracking-tight text-slate-900 dark:text-white">{title}</div>
           <div className="text-xs text-slate-500 dark:text-slate-400">Smart Civic</div>
         </div>
       </Link>
@@ -67,8 +67,8 @@ export function Sidebar({
               className={clsx(
                 "group flex items-center gap-3 rounded-2xl px-3 py-3 text-sm transition-all duration-200",
                 active
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md font-medium"
-                  : "text-slate-700 hover:bg-white/40 dark:text-slate-300 dark:hover:bg-slate-900/40 hover:text-blue-600 dark:hover:text-blue-400"
+                  ? "bg-gradient-to-r from-blue-700 to-indigo-700 text-white shadow-lg shadow-blue-500/25 font-black scale-[1.02]"
+                  : "text-slate-900 hover:bg-white/40 dark:text-white dark:hover:bg-slate-900/40 hover:text-blue-600 dark:hover:text-blue-400 font-black"
               )}
             >
               <Icon className="size-4" />
@@ -78,11 +78,11 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <ThemeToggle compact className="w-full justify-center" />
+      <div className="mt-2 flex items-center justify-between gap-2 border-t border-slate-200/40 pt-4 dark:border-slate-800/40">
+        <ThemeToggle compact className="w-full justify-center transition-all hover:scale-105" />
         <button
           onClick={onLogout}
-          className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200/70 bg-white/60 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm backdrop-blur transition hover:bg-white/70 dark:border-slate-700/70 dark:bg-slate-900/40 dark:text-slate-200 dark:hover:bg-slate-900/55"
+          className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/80 px-4 py-2.5 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-white hover:text-red-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-white dark:hover:bg-slate-900 dark:hover:text-red-400"
         >
           <LogOut className="size-4" />
           Logout

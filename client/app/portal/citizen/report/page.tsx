@@ -14,7 +14,7 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { http } from "@/services/http";
-import { AlertTriangle, MapPin } from "lucide-react";
+import { AlertTriangle, MapPin, Timer } from "lucide-react";
 import { FileUpload } from "@/components/ui/FileUpload";
 
 const numeric = (label: string) =>
@@ -59,9 +59,9 @@ type FormValues = z.infer<typeof schema>;
 export default function CitizenReportIssuePage() {
   const [files, setFiles] = useState<File[]>([]);
   const [done, setDone] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [mapPosition, setMapPosition] = useState<[number, number] | null>(null);
-
   const {
     register,
     handleSubmit,
@@ -87,6 +87,7 @@ export default function CitizenReportIssuePage() {
     const timer = setTimeout(async () => {
       const query = [watchedAddress, watchedLandmark].filter(Boolean).join(", ");
       if (query.length > 5) {
+        setIsSearching(true);
         try {
           const res = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
           if (res.data && res.data.length > 0) {
@@ -99,9 +100,11 @@ export default function CitizenReportIssuePage() {
           }
         } catch (err) {
           console.error("Geocoding error:", err);
+        } finally {
+          setIsSearching(false);
         }
       }
-    }, 1500);
+    }, 600);
 
     return () => clearTimeout(timer);
   }, [watchedAddress, watchedLandmark, setValue]);
@@ -155,16 +158,16 @@ export default function CitizenReportIssuePage() {
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <div>
-                <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Basic Details</div>
+                <div className="mb-3 text-sm font-black uppercase tracking-[0.1em] text-slate-700 dark:text-slate-300">Basic Details</div>
                 <div className="grid gap-4">
                   <div>
-                    <div className="mb-2 text-xs font-medium text-slate-700">Issue Title</div>
+                    <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Issue Title</div>
                     <Input placeholder="e.g., Pothole near main road" {...register("title")} />
                     {errors.title && <div className="mt-1 text-xs text-red-600">{errors.title.message}</div>}
                   </div>
 
                   <div>
-                    <div className="mb-2 text-xs font-medium text-slate-700">Detailed Description</div>
+                    <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Detailed Description</div>
                     <textarea
                       className="w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-900 outline-none ring-brand-blue/20 shadow-sm transition placeholder:text-slate-400 focus:ring-4 dark:border-slate-700/80 dark:bg-slate-950/40 dark:text-slate-100 dark:placeholder:text-slate-500"
                       rows={4}
@@ -178,7 +181,7 @@ export default function CitizenReportIssuePage() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <div className="mb-2 text-xs font-medium text-slate-700">Category</div>
+                  <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Category</div>
                   <select
                     className="w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-900 outline-none ring-brand-blue/20 shadow-sm transition focus:ring-4 dark:border-slate-700/80 dark:bg-slate-950/40 dark:text-slate-100"
                     {...register("category")}
@@ -196,7 +199,7 @@ export default function CitizenReportIssuePage() {
                   </select>
                 </div>
                 <div>
-                  <div className="mb-2 text-xs font-medium text-slate-700">Impact Severity</div>
+                  <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Impact Severity</div>
                   <select
                     className="w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-900 outline-none ring-brand-blue/20 shadow-sm transition focus:ring-4 dark:border-slate-700/80 dark:bg-slate-950/40 dark:text-slate-100"
                     {...register("severity")}
@@ -209,59 +212,63 @@ export default function CitizenReportIssuePage() {
                 </div>
               </div>
 
-              <div>
-                <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Location Details</div>
-                <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="space-y-4">
                   <div>
-                    <div className="mb-2 text-xs font-medium text-slate-700">Address / Street</div>
-                    <Input placeholder="Enter street or locality..." {...register("address")} />
-                    {errors.address && <div className="mt-1 text-xs text-red-600">{errors.address.message}</div>}
+                    <div className="mb-3 text-sm font-black uppercase tracking-[0.1em] text-slate-700 dark:text-slate-300">Location Details</div>
+                    <div className="grid gap-4">
+                      <div>
+                        <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Address / Street</div>
+                        <Input placeholder="Enter street or locality..." {...register("address")} />
+                        {errors.address && <div className="mt-1 text-xs text-red-600">{errors.address.message}</div>}
+                      </div>
+                      <div>
+                        <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Landmark / Area</div>
+                        <Input placeholder="Nearby landmark..." {...register("landmark")} />
+                      </div>
+                      <div>
+                        <div className="mb-2 text-sm font-black text-slate-700 dark:text-slate-300">Ward (optional)</div>
+                        <Input placeholder="Ward number/name" {...register("ward")} />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="mb-2 text-xs font-medium text-slate-700">Landmark / Area</div>
-                    <Input placeholder="Nearby landmark..." {...register("landmark")} />
+                  
+                  <div className="flex flex-col justify-end pt-2">
+                    <label className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm font-black text-slate-700 shadow-sm cursor-pointer transition hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-950/40 dark:text-slate-300">
+                      <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-blue-600" {...register("isAnonymous")} />
+                      Report anonymously
+                    </label>
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-xs font-medium text-slate-700 flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-blue-500" /> Verify on Map
-                  </div>
-                  <div className="text-[10px] text-slate-400">Map updates automatically based on address</div>
-                </div>
-                <LocationPickerMap
-                  initialCenter={[12.9716, 77.5946]}
-                  position={mapPosition}
-                  onLocationSelect={(lat, lng) => {
-                    setValue("latitude", lat.toFixed(6));
-                    setValue("longitude", lng.toFixed(6));
-                    setMapPosition([lat, lng]);
-                  }}
-                />
-                {(errors.latitude || errors.longitude) && (
-                  <div className="mt-2 text-xs text-red-600 font-medium italic">
-                    * Please select a point on the map to confirm the location.
-                  </div>
-                )}
-              </div>
-
-              <div className="grid gap-3 md:grid-cols-2">
                 <div>
-                  <div className="mb-2 text-xs font-medium text-slate-700">Ward (optional)</div>
-                  <Input placeholder="Ward number/name" {...register("ward")} />
-                </div>
-                <div className="flex flex-col justify-end">
-                  <label className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-sm cursor-pointer transition hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-950/40 dark:text-slate-200">
-                    <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-blue-600" {...register("isAnonymous")} />
-                    Report anonymously
-                  </label>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="text-sm font-black text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                      <MapPin className="h-3 w-3 text-blue-500" /> Verify on Map
+                      {isSearching && <span className="ml-2 inline-flex items-center gap-1 text-[10px] text-blue-600 animate-pulse"><Timer className="size-3" /> Searching...</span>}
+                    </div>
+                    <div className="text-[10px] text-slate-400">Map animates as you type</div>
+                  </div>
+
+                  <LocationPickerMap
+                    initialCenter={[12.9716, 77.5946]}
+                    position={mapPosition}
+                    onLocationSelect={(lat, lng) => {
+                      setValue("latitude", lat.toFixed(6));
+                      setValue("longitude", lng.toFixed(6));
+                      setMapPosition([lat, lng]);
+                    }}
+                  />
+                  {(errors.latitude || errors.longitude) && (
+                    <div className="mt-2 text-xs text-red-600 font-medium italic">
+                      * Please verify the location on the map.
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div>
-                <div className="mb-2 text-xs font-medium text-slate-700">Visual Evidence</div>
+                <div className="mb-3 text-sm font-black uppercase tracking-[0.1em] text-slate-700 dark:text-slate-300">Visual Evidence</div>
                 <FileUpload files={files} onFilesChange={setFiles} />
               </div>
             </div>

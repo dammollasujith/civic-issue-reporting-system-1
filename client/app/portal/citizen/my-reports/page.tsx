@@ -59,12 +59,11 @@ export default function MyReportsPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-200 bg-white/70 dark:border-slate-800 dark:bg-slate-950/35">
               <tr>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Complaint ID</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Title</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Category</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Date</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Status</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">Upvotes</th>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Complaint ID</th>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Title</th>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Category</th>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Date</th>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +89,6 @@ export default function MyReportsPage() {
                       {it.status.replaceAll("_", " ")}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{it.upvoteCount}</td>
                 </tr>
               ))}
               {filtered.length === 0 && (

@@ -15,10 +15,10 @@ export async function getMyProfile(req: Request, res: Response) {
 }
 
 const updateSchema = z.object({
-  name: z.string().min(2).max(80).optional(),
-  phone: z.string().min(5).max(30).optional(),
-  address: z.string().min(3).max(200).optional(),
-  avatarUrl: z.string().url().optional()
+  name: z.string().min(2).max(80).optional().or(z.literal("")),
+  phone: z.string().min(5).max(30).optional().or(z.literal("")),
+  address: z.string().min(3).max(200).optional().or(z.literal("")),
+  avatarUrl: z.string().url().optional().or(z.literal(""))
 });
 
 export async function updateMyProfile(req: Request, res: Response) {
@@ -33,4 +33,10 @@ export async function updateMyProfile(req: Request, res: Response) {
   if (user.isBlocked) throw new HttpError(403, "Account blocked");
   return res.json({ ok: true, user });
 }
+import { getCitizenProfile } from "../services/gamification.js";
 
+export async function getGamificationStats(req: Request, res: Response) {
+  if (!req.auth) throw new HttpError(401, "Unauthorized");
+  const stats = await getCitizenProfile(req.auth.userId);
+  return res.json({ ok: true, stats });
+}

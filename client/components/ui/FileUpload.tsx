@@ -8,10 +8,16 @@ interface FileUploadProps {
 
 export function FileUpload({ onFilesChange, files }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const takePhotoRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleClick = () => {
     inputRef.current?.click();
+  };
+
+  const handleCameraClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    takePhotoRef.current?.click();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +47,7 @@ export function FileUpload({ onFilesChange, files }: FileUploadProps) {
             onFilesChange([...files, ...newFiles].slice(0, 6));
           }
         }}
-        className={`group relative flex flex-col items-center justify-center overflow-hidden rounded-[2rem] border-2 border-dashed transition-all duration-300 py-12 cursor-pointer
+        className={`group relative flex flex-col items-center justify-center overflow-hidden rounded-[2.5rem] border-2 border-dashed transition-all duration-500 py-14 cursor-pointer
           ${isDragging 
             ? "border-blue-500 bg-blue-50/50 scale-[0.99]" 
             : "border-slate-200 bg-slate-50/30 hover:border-blue-300 hover:bg-blue-50/20"
@@ -51,7 +57,7 @@ export function FileUpload({ onFilesChange, files }: FileUploadProps) {
         <div className="absolute inset-0 pointer-events-none opacity-20 transition-transform duration-700 group-hover:scale-110">
           <Cloud className="absolute top-4 left-1/4 h-16 w-16 text-blue-400/40" />
           <Cloud className="absolute top-8 right-1/4 h-12 w-12 text-blue-300/30" />
-          <Cloud className="absolute -bottom-4 left-1/2 -translate-x-1/2 h-32 w-48 text-blue-500/10" />
+          <Cloud className="absolute -bottom-4 left-1/2 -translate-x-1/2 h-40 w-64 text-blue-500/10" />
         </div>
 
         <input 
@@ -63,20 +69,39 @@ export function FileUpload({ onFilesChange, files }: FileUploadProps) {
           onChange={handleChange}
         />
 
-        {/* Premium Button */}
-        <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-xl dark:bg-slate-900 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-12">
-            <Camera className="h-8 w-8 text-blue-600" />
+        <input 
+          type="file" 
+          ref={takePhotoRef}
+          className="hidden" 
+          accept="image/*"
+          capture="environment"
+          onChange={handleChange}
+        />
+
+        {/* Premium Button Container */}
+        <div className="relative z-10 flex flex-col items-center gap-6">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-2xl dark:bg-slate-900 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-12 group-hover:shadow-blue-500/20">
+            <Camera className="h-10 w-10 text-blue-600" />
           </div>
           
-          <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-bold text-white shadow-xl shadow-blue-500/20 transition-all duration-300 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
-            <Images className="h-5 w-5" />
-            <span className="text-base">Upload Quick Snap</span>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 font-bold text-white shadow-xl shadow-blue-500/20 transition-all duration-300 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:scale-95">
+              <Images className="h-5 w-5" />
+              <span className="text-base">Upload Evidence</span>
+            </div>
+
+            <div 
+              onClick={handleCameraClick}
+              className="flex items-center gap-3 rounded-2xl bg-white border-2 border-slate-200 px-8 py-4 font-bold text-slate-800 shadow-lg transition-all duration-300 hover:border-blue-400 hover:text-blue-600 hover:-translate-y-0.5 active:scale-95 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-100"
+            >
+              <Camera className="h-5 w-5" />
+              <span className="text-base">Take Photo</span>
+            </div>
           </div>
           
           <div className="flex flex-col items-center">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">Drag & drop evidence here</span>
-            <span className="text-[10px] uppercase tracking-widest text-slate-400 mt-1 font-bold">Max 6 files • Images or Videos</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">Drag & drop or use your camera</span>
+            <span className="text-[10px] uppercase tracking-widest text-slate-400 mt-2 font-bold">Max 6 files • High Quality Uploads</span>
           </div>
         </div>
       </div>

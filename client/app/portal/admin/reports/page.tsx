@@ -44,26 +44,23 @@ export default function AdminReportsPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-200 bg-white/70 dark:border-slate-800 dark:bg-slate-950/35">
               <tr>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Hash className="size-3.5 text-blue-500" /> Complaint ID</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Hash className="size-4 text-blue-500" /> Complaint ID</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Tag className="size-3.5 text-indigo-500" /> Title</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Tag className="size-4 text-indigo-500" /> Title</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Tag className="size-3.5 text-purple-500" /> Category</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Tag className="size-4 text-purple-500" /> Category</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><MapPin className="size-3.5 text-teal-500" /> Ward</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><MapPin className="size-4 text-teal-500" /> Ward</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><AlertCircle className="size-3.5 text-orange-500" /> Severity</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><AlertCircle className="size-4 text-orange-500" /> Severity</div>
                 </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><ThumbsUp className="size-3.5 text-emerald-500" /> Upvotes</div>
-                </th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5"><Activity className="size-3.5 text-rose-500" /> Status</div>
+                <th className="px-4 py-4 text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5"><Activity className="size-4 text-rose-500" /> Status</div>
                 </th>
               </tr>
             </thead>
@@ -78,7 +75,6 @@ export default function AdminReportsPage() {
                   <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{it.category.replaceAll("_", " ")}</td>
                   <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{it.ward || "—"}</td>
                   <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{it.severity}</td>
-                  <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{it.upvoteCount}</td>
                   <td className="px-4 py-3">
                     <select
                       value={it.status}

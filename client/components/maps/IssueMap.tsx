@@ -121,8 +121,7 @@ export function IssueMap({
                   <div className="text-sm font-semibold">{it.title}</div>
                   <div className="text-xs text-slate-600">{it.category.replaceAll("_", " ")}</div>
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="size-2 rounded-full" style={{ background: statusColor(it.status) }} />
-                    {it.status.replaceAll("_", " ")} • {it.upvoteCount} upvotes
+                    {it.status.replaceAll("_", " ")}
                   </div>
                   <div className="text-[11px] text-slate-500">{new Date(it.createdAt).toLocaleString()}</div>
                 </div>
