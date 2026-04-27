@@ -44,7 +44,7 @@ const WorldMap = () => {
         .data(countries.features)
         .enter()
         .append("path")
-        .attr("d", (d: any) => path(d))
+        .attr("d", (d: any) => path(d)!)
         .attr("fill", "rgba(96, 165, 250, 0.03)")
         .attr("stroke", "#60a5fa")
         .attr("stroke-width", 2)
@@ -305,7 +305,7 @@ export default function HomePage() {
               {/* Decorative shapes */}
               <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] -mr-48 -mt-48" />
               <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] -ml-48 -mb-48" />
-              
+
               <div className="relative z-10 max-w-3xl mx-auto space-y-10">
                 <h2 className="text-5xl md:text-6xl font-syne font-bold text-white leading-tight">Ready to build a <span className="text-blue-500">better</span> city?</h2>
                 <p className="text-xl text-slate-400">Join our growing network of civic heroes and start making an impact today.</p>
@@ -334,13 +334,13 @@ export default function HomePage() {
             </div>
             <p className="text-sm text-slate-500 max-w-xs">The future of urban management is collaborative and transparent.</p>
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-8 text-sm font-bold text-slate-400 uppercase tracking-widest">
             <Link href="/docs" className="hover:text-black dark:hover:text-white transition-colors">Documentation</Link>
             <Link href="/privacy" className="hover:text-black dark:hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-black dark:hover:text-white transition-colors">Terms</Link>
           </div>
-          
+
           <div className="text-sm font-medium text-slate-400 italic">
             © {new Date().getFullYear()} Smart Civic Lab.
           </div>
