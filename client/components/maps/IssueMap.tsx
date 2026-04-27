@@ -106,7 +106,7 @@ export function IssueMap({
         center={center}
         zoom={13}
         style={{ height: 520, width: "100%" }}
-        whenCreated={setMap}
+        ref={setMap}
         className="z-0"
       >
         <TileLayer

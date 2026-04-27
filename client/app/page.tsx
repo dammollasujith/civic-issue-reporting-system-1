@@ -44,15 +44,23 @@ const WorldMap = () => {
         .data(countries.features)
         .enter()
         .append("path")
-        .attr("d", path)
-        .attr("fill", "rgba(255,255,255,0.3)")
-        .attr("stroke", "#abc4e8")
-        .attr("stroke-width", 2.2);
+        .attr("d", (d: any) => path(d))
+        .attr("fill", "rgba(96, 165, 250, 0.03)")
+        .attr("stroke", "#60a5fa")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 0.95)
+        .attr("class", "map-path");
 
       cities.forEach((city) => {
         const [x, y] = projection(city.coords as [number, number]) || [0, 0];
 
-        svg.append("circle").attr("cx", x).attr("cy", y).attr("r", 4).attr("fill", "#78a8ff").attr("opacity", 0.95);
+        svg.append("circle")
+          .attr("cx", x)
+          .attr("cy", y)
+          .attr("r", 4.5)
+          .attr("fill", "#2563eb")
+          .attr("opacity", 1)
+          .attr("filter", "drop-shadow(0 0 4px rgba(37, 99, 235, 0.5))");
 
         const ringGroup = svg.append("g");
         [12, 22, 32].forEach((radius, index) => {
@@ -62,9 +70,9 @@ const WorldMap = () => {
             .attr("cy", y)
             .attr("r", radius)
             .attr("fill", "none")
-            .attr("stroke", "#9abfff")
-            .attr("stroke-width", 1)
-            .attr("opacity", 0.32);
+            .attr("stroke", "#60a5fa")
+            .attr("stroke-width", 1.2)
+            .attr("opacity", 0.4);
 
           ring
             .append("animate")
@@ -107,7 +115,7 @@ const WorldMap = () => {
       <div className="hero-gridlines absolute inset-0 opacity-80" />
       <div className="hero-glow absolute left-[10%] top-[18%] size-[24rem]" />
       <div className="hero-glow absolute bottom-[6%] right-[12%] size-[28rem]" />
-      <svg ref={svgRef} className="h-full w-full opacity-[0.82]" />
+      <svg ref={svgRef} className="h-full w-full opacity-90" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.14),rgba(255,255,255,0.9)_72%,rgba(255,255,255,1)_100%)] dark:bg-[radial-gradient(circle_at_50%_45%,rgba(15,23,42,0.08),rgba(2,6,23,0.8)_72%,rgba(2,6,23,1)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-slate-950 dark:via-slate-950/95" />
     </div>

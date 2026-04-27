@@ -5,6 +5,7 @@ import { clsx } from "clsx";
 type Props = ComponentProps<"button"> & {
   href?: string;
   variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
 };
 
 const base =
@@ -17,8 +18,14 @@ const variants: Record<NonNullable<Props["variant"]>, string> = {
   ghost: "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900/50"
 };
 
-export function Button({ href, variant = "primary", className, ...rest }: Props) {
-  const cls = clsx(base, variants[variant], className);
+const sizes: Record<NonNullable<Props["size"]>, string> = {
+  sm: "px-3 py-1 text-xs",
+  md: "px-4 py-2 text-sm",
+  lg: "px-6 py-3 text-base"
+};
+
+export function Button({ href, variant = "primary", size = "md", className, ...rest }: Props) {
+  const cls = clsx(base, variants[variant], sizes[size], className);
   if (href) {
     return (
       <Link className={cls} href={href}>

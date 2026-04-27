@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { IssueMap } from "@/components/maps/IssueMap";
+import dynamic from "next/dynamic";
+const IssueMap = dynamic(() => import("@/components/maps/IssueMap").then(mod => mod.IssueMap), { ssr: false });
 import { http } from "@/services/http";
 import { Card } from "@/components/ui/Card";
 import { MapPinned } from "lucide-react";

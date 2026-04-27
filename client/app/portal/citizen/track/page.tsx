@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { http } from "@/services/http";
@@ -23,6 +23,14 @@ function stepMeta(step: string) {
 }
 
 export default function TrackStatusPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500 animate-pulse">Loading status...</div>}>
+      <TrackStatusContent />
+    </Suspense>
+  );
+}
+
+function TrackStatusContent() {
   const sp = useSearchParams();
   const id = sp.get("id") || "";
   const [issue, setIssue] = useState<any>(null);
@@ -122,4 +130,3 @@ export default function TrackStatusPage() {
     </div>
   );
 }
-

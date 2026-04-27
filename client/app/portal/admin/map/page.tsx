@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { http } from "@/services/http";
-import { IssueMap } from "@/components/maps/IssueMap";
+import dynamic from "next/dynamic";
+const IssueMap = dynamic(() => import("@/components/maps/IssueMap").then(mod => mod.IssueMap), { ssr: false });
 import { MapPinned } from "lucide-react";
 
 export default function AdminMapPage() {
@@ -31,4 +32,3 @@ export default function AdminMapPage() {
     </div>
   );
 }
-
